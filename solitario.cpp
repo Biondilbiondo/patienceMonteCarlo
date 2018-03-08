@@ -5,6 +5,9 @@ using std::endl;
 #include <string>
 using std::string;
 
+#include <ctime>
+using std::time;
+
 const string suits[4] = { "hearts", "diamonds", "clubs", "spades"};
 
 class Card{
@@ -86,6 +89,16 @@ public:
   void printDeck( void ){
     for( int i = 0; i < 40; i++ )
       cards[i].printCard();
+  }
+
+  void shuffle( int nrand = 100 ){
+    for( int i = 0; i < nrand; i++ ){
+      int a = rand() % 40;
+      int b = rand() % 40;
+      Card c = cards[a];
+      cards[a] = cards[b];
+      cards[b] = c;
+    }
   }
 
   Card pop( void ){
@@ -171,7 +184,10 @@ public:
 };
 
 int main( void ){
+  srand( time( 0 ) );
   Deck d;
+  d.shuffle();
+  d.printDeck();
   if( d.solo() )
     cout << "Success!\n";
   else
