@@ -103,7 +103,7 @@ public:
 
   Card pop( void ){
     if( cardInDeck() == 0 ){
-      cout << "The deck is empty!\a\n";
+      //cout << "The deck is empty!\a\n";
       Card c;
       c.setNone();
       return c;
@@ -185,12 +185,18 @@ public:
 
 int main( void ){
   srand( time( 0 ) );
+  int success = 0;
   Deck d;
-  d.shuffle();
-  d.printDeck();
-  if( d.solo() )
-    cout << "Success!\n";
-  else
-    cout << "Failed!\n";
+  for( int i = 0; i < 100000; i++ ){
+    d.shuffle();
+    //d.printDeck();
+    if( d.solo() ){
+      success++;
+      //cout << "Success!\n";
+    }
+    //else
+    //cout << "Failed!\n";
+  }
+  cout << "Success rate: " << success/100000.0 << "\n";
   return 0;
 }
