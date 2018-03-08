@@ -89,6 +89,13 @@ public:
   }
 
   Card pop( void ){
+    if( cardInDeck() == 0 ){
+      cout << "The deck is empty!\a\n";
+      Card c;
+      c.setNone();
+      return c;
+    }
+
     for( int i = 39; i >= 0; i-- ){
       if( !cards[i].isNone() ){
         Card c = cards[i];
@@ -98,10 +105,76 @@ public:
     }
   }
 
+  int cardInDeck( void ){
+    int i;
+    for( i = 0; i < 40; i++ )
+      if( cards[i].isNone() )
+        return i;
+    return i;
+  }
+
+  bool solo( bool verbose = false ){
+    Deck d = *this;
+    Card table[10][4];
+    Card hand;
+
+    for( int i = 0; i < 10; i++ )
+      for( int j = 0; j < 4; j++ ){
+        if( i == 9 ){
+          Card c;
+          c.setNone();
+          table[i][j] = c;
+        }
+        else
+          table[i][j] = d.pop();
+      }
+
+    hand = d.pop();
+
+    while( !hand.isNone() ){
+      if( verbose ){
+        for( int j = 0; j < 4; j++ ){
+          for( int i = 0; i < 10; i++ ){
+            cout << table[i][j].getRank() << table[i][j].getSuit() << "\t";
+          }
+          cout << "\n";
+        }
+
+        cout << "\nHAND: ";
+        hand.printCard();
+        cout << "\nDECK:\n";
+        d.printDeck();
+        cout << "\n_______________________________________\n\n";
+      }
+
+      if( hand.getRank() == 10 ){
+        table[9][hand.getSuitN() - 1] = hand;
+        hand = d.pop();
+      }
+      else{
+        Card c = table[hand.getRank() - 1][hand.getSuitN() - 1];
+        table[hand.getRank() - 1][hand.getSuitN() - 1] = hand;
+        hand = c;
+      }
+    }
+
+    bool check = true;
+    for( int j = 0; j < 4; j++ ){
+      for( int i = 0; i < 10; i++ ){
+        check &= (table[i][j].getRank() == i + 1 );
+        check &= (table[i][j].getSuitN() == j + 1 );
+      }
+    }
+    return check;
+
+  }
 };
 
 int main( void ){
   Deck d;
-  d.printDeck();
+  if( d.solo() )
+    cout << "Success!\n";
+  else
+    cout << "Failed!\n";
   return 0;
 }
