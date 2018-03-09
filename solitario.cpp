@@ -126,7 +126,7 @@ public:
     return i;
   }
 
-  bool solo( bool verbose = false ){
+  bool patience( bool verbose = false ){
     Deck d = *this;
     Card table[10][4];
     Card hand;
@@ -145,7 +145,7 @@ public:
     hand = d.pop();
 
     while( !hand.isNone() ){
-      if( verbose ){
+      if( verbose ){ //Print out the situation of table, hand and deck.
         for( int j = 0; j < 4; j++ ){
           for( int i = 0; i < 10; i++ ){
             cout << table[i][j].getRank() << table[i][j].getSuit() << "\t";
@@ -189,14 +189,10 @@ int main( void ){
   Deck d;
   for( int i = 0; i < 100000; i++ ){
     d.shuffle();
-    //d.printDeck();
-    if( d.solo() ){
+    if( d.patience() ){
       success++;
-      //cout << "Success!\n";
     }
-    //else
-    //cout << "Failed!\n";
   }
-  cout << "Success rate: " << success/100000.0 << "\n";
+  cout << "Success rate: " << success/100000.0 * 100 << "\%\n";
   return 0;
 }
